@@ -4,44 +4,41 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.seldonfleet.data.repository.DataStoreFavoritesRepository
+import com.example.seldonfleet.data.repository.FleetRepositoryImpl
+import com.example.seldonfleet.data.source.AssetFleetSource
+import com.example.seldonfleet.data.source.FleetJsonParser
+import com.example.seldonfleet.domain.usecase.ClassifyDevice
+import com.example.seldonfleet.ui.FleetApp
+import com.example.seldonfleet.ui.list.FleetListViewModel
 import com.example.seldonfleet.ui.theme.SeldonFleetTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: FleetListViewModel by viewModels {
+        viewModelFactory {
+            initializer {
+                FleetListViewModel(
+                    repository = FleetRepositoryImpl(
+                        AssetFleetSource(applicationContext, FleetJsonParser())
+                    ),
+                    classifyDevice = ClassifyDevice(),
+                    favorites = DataStoreFavoritesRepository(applicationContext)
+                )
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SeldonFleetTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                FleetApp(viewModel)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SeldonFleetTheme {
-        Greeting("Android")
     }
 }
