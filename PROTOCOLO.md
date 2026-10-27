@@ -87,3 +87,15 @@ status alterado (por exemplo, DEV-0204 sairia de OK para CRITICO).
   (DEV-0745 está sem contato desde 18/10 e é classificado só pelos dados que tem).
 - **A previsão da seção 3 foi calculada à mão**, então pode conter erro
   aritmético. Mitigação: testes unitários de fronteira e conferência no app.
+
+## 6. Resultado observado
+
+Executado em Xiaomi Redmi 12. O app exibiu OK: 16, Atenção: 8,
+Crítico: 4, Sem dados: 2 (total 30), coincidindo com a previsão da seção 3.
+
+Verificações manuais adicionais:
+
+- Detalhe de um dispositivo Atenção (DEV-1711): justificativa "dreno de 9,7 %/h,
+  igual ou acima do limiar de 7 %/h", coerente com o cálculo da previsão.
+- Filtro preservado ao voltar do detalhe pelo botão do sistema.
+- Favoritos mantidos após encerrar o processo do app e reabri-lo.
